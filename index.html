@@ -1,53 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Guia Interativo do Evento Escolar</title>
-  <link rel="stylesheet" href="./style.css" />
-  <script src="./script.js" defer></script>
-  <style>
-    /* estilos mínimos para visualizar enquanto seu style.css não é carregado */
-    body { font-family: Arial, sans-serif; background:#eef2f5; color:#222; margin:0; padding:20px; }
-    header { background:#0b2540; color:#fff; padding:28px; border-radius:12px; text-align:center; }
-    header p { color:#34d2b6; font-style:italic; margin-top:6px; }
-    #barra-pesquisa { margin:26px auto; display:flex; justify-content:center; }
-    #input-pesquisa { width:92%; max-width:760px; padding:14px 18px; border-radius:40px; border:6px solid #2b6; outline:none; font-size:16px; background:#fff; box-shadow: 0 6px 0 rgba(0,0,0,0.06) inset; }
-    #container-salas { margin-top:18px; display:flex; flex-direction:column; gap:18px; align-items:center; }
-    .secao-ano { width:92%; max-width:900px; background:#fff; padding:16px; border-radius:12px; box-shadow:0 8px 30px rgba(2,10,30,0.06); display:flex; flex-direction:column; gap:12px; }
-    .cards-container { display:flex; gap:12px; flex-wrap:wrap; }
-    .sala-card { min-width:180px; padding:12px; border-radius:10px; background:#f7fafc; box-shadow:0 6px 18px rgba(0,0,0,0.04); cursor:pointer; }
-    footer { text-align:center; margin:40px 0; color:#444; }
-    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
-    .modal-content { width:95%; max-width:900px; background:#fff; padding:18px; border-radius:10px; position:relative; }
-    .fechar-modal { position:absolute; right:12px; top:8px; cursor:pointer; font-size:22px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interativo do Evento Escolar</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🗺️ Guia Interativo do Evento Escolar</h1>
-    <p>Selecione uma sala abaixo para ver o vídeo de apresentação do professor!</p>
-  </header>
 
-  <main>
-    <section id="barra-pesquisa">
-      <input id="input-pesquisa" placeholder="🔍 Pesquisar por Sala, Professor ou Tema" />
-    </section>
+    <header>
+        <h1>🗺️ Guia Interativo do Evento Escolar</h1>
+        <p>Selecione uma sala abaixo para ver o vídeo de apresentação do professor!</p>
+    </header>
+    </header>
 
-    <section id="container-salas" aria-live="polite">
-      <!-- Conteúdo injetado por script.js -->
-    </section>
-  </main>
-
-  <div id="modal-video" class="modal" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-      <span class="fechar-modal" id="fechar-modal-video" aria-label="Fechar">×</span>
-      <div id="video-embed-container"></div>
+    <div id="barra-pesquisa">
+        <input type="text" id="input-pesquisa" placeholder="🔍 Pesquisar por Sala, Professor ou Tema...">
     </div>
-  </div>
 
-  <footer>
-    <small>Guia Interativo — CETI EPT</small>
-  </footer>
+    <main id="container-salas">
+        </main>
+
+    <main id="container-salas">
+        </main>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="fechar-modal">&times;</span>
+            <h2 id="modal-titulo"></h2>
+            <p id="modal-professor"></p>
+            <div id="video-embed-container">
+                </div>
+        </div>
+    <div id="modal-wiki" class="modal">
+        <div class="modal-content">
+            <span class="fechar-modal-wiki">&times;</span>
+            <h2 id="wiki-titulo"></h2>
+            <p id="wiki-professor"></p>
+            <div id="wiki-conteudo">
+                <h3>Seção 1: Introdução</h3>
+                <p>Este é o espaço reservado para a documentação detalhada do projeto da turma. Você pode usar HTML básico aqui (parágrafos, listas, negrito).</p>
+                
+                <h3>Seção 2: Objetivos</h3>
+                <ul>
+                    <li>Detalhe os objetivos da turma.</li>
+                    <li>Liste os materiais utilizados.</li>
+                </ul>
+                
+                <p style="margin-top: 15px; font-weight: bold; color: var(--cor-principal);">Lembre-se de substituir este texto pelo seu conteúdo real da Wiki.</p>
+            </div>
+        </div>
+</div>
+
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
