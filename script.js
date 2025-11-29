@@ -1,6 +1,6 @@
 // --- 1. Base de Dados: Estrutura hierárquica por Ano/Turma ---
-
-const IMAGEM_PADRAO = 'URL_DA_SUA_FOTO_PADRAO_AQUI.jpg'; 
+// ATUALIZE ESTA LINHA NO SEU script.js
+const IMAGEM_PADRAO = 'https://via.placeholder.com/150'; // URL de uma imagem genérica temporária (quadrado cinza)
 
 // Função auxiliar para criar um ID único e consistente 
 function gerarIdUnico(nome, ano) {
@@ -370,3 +370,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
