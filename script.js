@@ -2,7 +2,7 @@
 
 const IMAGEM_PADRAO = 'URL_DA_SUA_FOTO_PADRAO_AQUI.jpg'; 
 
-// Função auxiliar para criar um ID único e consistente (MANTIDA)
+// Função auxiliar para criar um ID único e consistente 
 function gerarIdUnico(nome, ano) {
     return (ano + '-' + nome).replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
 }
@@ -180,7 +180,7 @@ function encontrarProjetoPorId(idDesejado, estrutura = estruturaEventos) {
 
 // --- 2. Funções de Manipulação da Interface ---
 
-// Função principal de renderização (LIMPA de listeners e Avaliação)
+// Função principal de renderização (Listeners no Loop)
 function gerarListaDeSalas(data, containerId = 'container-salas') {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; 
@@ -212,7 +212,6 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
         secao.projetos.forEach(projeto => {
             const card = document.createElement('div');
             
-            // Adicionamos classes de identificação para o Event Delegation
             card.setAttribute('data-id-projeto', projeto.idUnico); 
             card.setAttribute('data-tipo', projeto.tipo);
 
@@ -220,31 +219,31 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
                 card.className = 'sala-card video-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">📺 ASSISTIR VÍDEO</p>`;
                 
+                // Retornando ao método antigo, mas com IDs para segurança
+                const idProjeto = projeto.idUnico;
+                card.addEventListener('click', () => abrirModalVideoPorId(idProjeto)); 
+                
             } else if (projeto.tipo === "wiki") {
                 card.className = 'sala-card wiki-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold; color: var(--cor-principal);">📖 VER WIKI</p>`;
                 
+                // Retornando ao método antigo, mas com IDs para segurança
+                const idProjeto = projeto.idUnico;
+                card.addEventListener('click', () => abrirModalWikiPorId(idProjeto)); 
+                
             } else if (projeto.tipo === "guia-principal") {
-                card.className = 'sala-card video-card guia-btn'; // Adiciona classe guia-btn para distinguir
+                card.className = 'sala-card video-card guia-btn'; 
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">➡️ CLIQUE PARA ABRIR O GUIA</p>`;
                 
-                // O Listener do guia principal DEVE permanecer aqui, pois ele muda a estrutura.
                 card.addEventListener('click', () => abrirSubGuia(secao));
             }
             
-            // REMOVIDO: Adiciona o componente de avaliação
-            /* if (projeto.tipo !== "guia-principal") {
-                const avaliacaoDiv = renderizarAvaliacao(projeto.idUnico); 
-                card.appendChild(avaliacaoDiv);
-            } */
-
+            // REMOVIDO: Avaliação
+            
             cardsContainer.appendChild(card);
         });
     });
 }
-
-// REMOVIDO: Função renderizarAvaliacao()
-// REMOVIDO: Função salvarAvaliacao()
 
 // Função para o filtro em tempo real (mantida)
 function adicionarFiltro() {
@@ -341,62 +340,4 @@ function abrirModalWikiPorId(idProjeto) {
 
 function fecharModalVideo() {
     const modal = document.getElementById('modal');
-    const videoContainer = document.getElementById('video-embed-container');
-    videoContainer.innerHTML = ''; 
-    modal.style.display = 'none';
-}
-
-// REMOVIDO: Função fecharModalWiki() não é mais necessária já que o modal não existe.
-
-
-// --- 3. Inicialização e Eventos de Fechamento ---
-
-// Função que aplica a Delegação de Eventos (Ouvinte único para os cards)
-function delegarEventosDeClique() {
-    const container = document.getElementById('container-salas');
-    
-    // ANEXA APENAS UM LISTENER AO CONTÊINER PRINCIPAL
-    container.addEventListener('click', (event) => {
-        const card = event.target.closest('.sala-card');
-        
-        // Ignora cliques que não são em um cartão ou se for o botão do Guia Principal
-        if (!card || card.classList.contains('guia-btn')) return;
-
-        const idProjeto = card.getAttribute('data-id-projeto');
-        const tipoAcao = card.getAttribute('data-tipo');
-
-        if (tipoAcao === 'video') {
-            abrirModalVideoPorId(idProjeto);
-        } else if (tipoAcao === 'wiki') {
-            // Chama a função que agora REDIRECIONA
-            abrirModalWikiPorId(idProjeto);
-        }
-    });
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Garante que a renderização só ocorra na página inicial
-    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
-        gerarListaDeSalas(estruturaEventos); 
-        adicionarFiltro(); 
-        delegarEventosDeClique(); 
-    }
-    
-    // Configuração dos eventos de fechamento (apenas para o modal de vídeo)
-    const fecharModalBtn = document.querySelector('.fechar-modal');
-    if (fecharModalBtn) fecharModalBtn.addEventListener('click', fecharModalVideo);
-    
-    window.addEventListener('click', (event) => {
-        const modalVideo = document.getElementById('modal');
-        if (modalVideo && event.target == modalVideo) {
-            fecharModalVideo();
-        }
-    });
-    
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            fecharModalVideo();
-        }
-    });
-});
+    const videoContainer = document.getElementById('video-embed-container
