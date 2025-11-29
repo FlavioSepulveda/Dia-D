@@ -1,34 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Interativo do Evento Escolar</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Guia Interativo do Evento Escolar</title>
+
+  <!-- link para seu CSS (verifique o nome/case) -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- carrega o script só depois do DOM (defer) -->
+  <script src="./script.js" defer></script>
 </head>
 <body>
+  <header>
+    <h1>🗺️ Guia Interativo do Evento Escolar</h1>
+    <p>Selecione uma sala abaixo para ver o vídeo de apresentação do professor!</p>
+  </header>
 
-    <header>
-        <h1>🗺️ Guia Interativo do Evento Escolar</h1>
-        <p>Selecione uma sala abaixo para ver o vídeo de apresentação do professor!</p>
-    </header> 
+  <main>
+    <!-- Barra de pesquisa -->
+    <section id="barra-pesquisa">
+      <input id="input-pesquisa" placeholder="🔍 Pesquisar por Sala, Professor ou Tema" />
+    </section>
 
-    <div id="barra-pesquisa">
-        <input type="text" id="input-pesquisa" placeholder="🔍 Pesquisar por Sala, Professor ou Tema...">
+    <!-- Aqui o seu script deve injetar todas as seções (1º ano, cards, etc) -->
+    <section id="container-salas" aria-live="polite">
+      <!-- conteúdo montado por script.js -->
+    </section>
+  </main>
+
+  <!-- Modal do vídeo -->
+  <div id="modal-video" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <span class="fechar-modal" id="fechar-modal-video" aria-label="Fechar">×</span>
+      <div id="video-embed-container"><!-- iframe será inserido aqui --></div>
     </div>
+  </div>
 
-    <main id="container-salas">
-        </main>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="fechar-modal">&times;</span>
-            <h2 id="modal-titulo"></h2>
-            <p id="modal-professor"></p>
-            <div id="video-embed-container">
-                </div>
-        </div>
+  <!-- Modal da wiki -->
+  <div id="modal-wiki" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <span class="fechar-modal-wiki" id="fechar-modal-wiki" aria-label="Fechar">×</span>
+      <div id="wiki-conteudo"><!-- conteúdo da wiki será inserido aqui --></div>
     </div>
-    <script src="script.js"></script>
+  </div>
+
+  <footer style="text-align:center; margin:30px 0;">
+    <small>Guia Interativo — CETI EPT</small>
+  </footer>
 </body>
 </html>
