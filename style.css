@@ -1,0 +1,361 @@
+/* Cores Temáticas de Tecnologia e Código (Contraste Aprimorado) */
+:root {
+    --cor-principal: #0A192F;    /* Azul Marinho Muito Escuro (Dark Mode Base) */
+    --cor-secundaria: #172A46;   /* Azul Escuro Intermediário (Para Hover/Fundo) */
+    --cor-acento: #00FFC0;      /* Verde Ciano Elétrico (Destaque Neon - Mantido) */
+    --cor-fundo: #F0F4F8;       /* Fundo muito claro e suave */
+    --cor-texto: #1C1C1C;       /* Texto escuro para alta legibilidade */
+    --cor-card-fundo: #FFFFFF;
+    --cor-card-acento: #F5FAFE; /* Fundo muito claro para cards */
+}
+
+/* O restante do CSS que usa as variáveis será atualizado automaticamente: */
+
+/* 1. O Header ficará em Azul Marinho Escuro (#0A192F). */
+/* 2. O Acento (Verde Limão) será usado nas estrelas e nos hovers. */
+/* 3. O texto escuro garante ótima leitura no fundo claro. */
+/* Reset básico e tipografia */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 25px 0;
+    margin-bottom: 30px;
+    background-color: var(--cor-principal);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /* APLICA A NOVA ANIMAÇÃO DE PULSO */
+    animation: pulse 2s infinite ease-in-out;
+}
+
+header h1 {
+    font-size: 1.8em; /* Ajustado para caber o título mais longo */
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 1.1em;
+    font-style: italic;
+    color: var(--cor-acento); /* Destaque na mensagem */
+}
+
+/* --- Container Principal --- */
+#container-salas {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Estilo para cada Seção de Ano (ex: 1º Ano A) */
+.secao-ano {
+    background-color: var(--cor-card-fundo);
+    border: 1px solid #e0e0e0;
+    border-left: 8px solid var(--cor-principal);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    display: flex; /* Habilita flexbox para organizar imagem e conteúdo */
+    flex-direction: column;
+}
+
+.secao-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+/* Foto da Turma */
+.foto-turma {
+    width: 150px;
+    min-width: 150px; /* Garante que a imagem não encolha demais */
+    height: 100px;
+    background-color: #ddd;
+    border-radius: 6px;
+    object-fit: cover; /* Garante que a imagem preencha o container */
+    border: 3px solid var(--cor-acento);
+}
+
+.secao-info {
+    flex-grow: 1;
+}
+
+.secao-info h2 {
+    color: var(--cor-principal);
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--cor-acento);
+    display: inline-block;
+}
+
+.secao-info .descricao-projeto {
+    color: #555;
+    font-style: italic;
+}
+
+.secao-ano .professor-responsavel {
+    margin-top: 5px;
+    font-weight: bold;
+    color: var(--cor-principal);
+}
+
+/* Container de Cards (para os botões) */
+.cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dois cards lado a lado */
+    gap: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #e0e0e0;
+}
+
+/* Estilo de cada Cartão de Sala/Ação */
+.sala-card {
+    background-color: var(--cor-card-acento); /* Fundo suave */
+    border: 1px solid var(--cor-principal);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Cores específicas para diferenciar os botões */
+.sala-card.video-card {
+    background-color: var(--cor-card-acento); /* Azul Suave */
+}
+.sala-card.wiki-card {
+    background-color: #fff3cd; /* Amarelo muito suave, combinando com o acento */
+    border-color: var(--cor-acento);
+}
+
+.sala-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.sala-card.video-card:hover {
+    background-color: #cfe2ff; /* Azul mais intenso no hover */
+}
+.sala-card.wiki-card:hover {
+    background-color: var(--cor-acento); /* Amarelo/Laranja no hover */
+}
+
+.sala-card h3 {
+    color: var(--cor-principal);
+    font-size: 1.1em;
+    margin-bottom: 3px;
+}
+
+.sala-card p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* --- Estilos do Modal (Popup) - Aplica-se aos dois modais --- */
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%; 
+    max-width: 800px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.fechar-modal, .fechar-modal-wiki {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.fechar-modal:hover, .fechar-modal:focus,
+.fechar-modal-wiki:hover, .fechar-modal-wiki:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Container do Vídeo */
+#video-embed-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; 
+    height: 0; 
+    margin-top: 15px;
+}
+
+#video-embed-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 6px;
+}
+
+/* Estilo do Conteúdo da Wiki */
+#wiki-conteudo h3 {
+    color: var(--cor-principal);
+    margin-top: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 700px) {
+    .secao-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .foto-turma {
+        width: 100%;
+        min-width: unset;
+        height: auto;
+        max-height: 150px;
+    }
+    .cards-container {
+        grid-template-columns: 1fr; /* Empilha os cartões em telas pequenas */
+    }
+    .modal-content {
+        margin: 10px auto; 
+        width: 95%;
+    }
+}
+
+
+/* --- Novo Estilo da Barra de Pesquisa --- */
+#barra-pesquisa {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+#input-pesquisa {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 15px;
+    border: 2px solid var(--cor-principal);
+    border-radius: 25px;
+    font-size: 1em;
+    outline: none;
+    transition: box-shadow 0.3s;
+}
+
+#input-pesquisa:focus {
+    box-shadow: 0 0 0 4px rgba(0, 71, 171, 0.2); /* Efeito de foco suave */
+}
+
+/* --- Estilos da Avaliação por Estrelas --- */
+.avaliacao-projeto {
+    margin-top: 10px;
+    padding-top: 5px;
+}
+
+.estrelas-container {
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.5em; /* Estrelas grandes */
+}
+
+.estrela {
+    color: #ccc; /* Estrela não votada (cinza) */
+    transition: color 0.2s;
+}
+
+.estrela.votada {
+    color: var(--cor-acento); /* Estrela votada (amarelo/laranja) */
+}
+
+/* Efeito de hover: ilumina a estrela atual e as anteriores */
+.estrelas-container:hover .estrela {
+    color: #fae089; /* Amarelo claro no hover */
+}
+.estrelas-container .estrela:hover ~ .estrela {
+    color: #ccc; /* Estrelas depois da que está sendo selecionada ficam cinzas */
+}
+
+/* Corrige o layout da seção de ano no filtro */
+.secao-ano[style*="display: none"] {
+    display: none !important;
+}
+
+/* --- Animação 1: Efeito Pulsante no Destaque (Header) --- */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 119, 182, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 119, 182, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 119, 182, 0); }
+}
+
+header {
+    /* Mantém o estilo anterior, mas adiciona a animação */
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* --- Animação 2: Efeito de 'Conexão' nos Cartões --- */
+
+/* Borda piscante sutil no hover */
+.sala-card {
+    border: 1px solid var(--cor-principal);
+    /* Transição suave em todas as propriedades */
+    transition: all 0.3s ease-in-out; 
+}
+
+.sala-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(0, 255, 192, 0.6); /* Sombra Verde Ciano */
+    border-color: var(--cor-acento); /* Borda verde viva */
+    background-color: var(--cor-card-acento); /* Fundo um pouco mais claro */
+}
+
+/* Efeito de hover no Input de Pesquisa */
+#input-pesquisa:focus {
+    /* Ajusta a sombra de foco para o novo azul tecnológico */
+    box-shadow: 0 0 0 4px rgba(0, 119, 182, 0.3); 
+}
+
+/* Estrelas de Avaliação usando o verde destaque */
+.estrela.votada {
+    color: var(--cor-acento); 
+}
+.estrelas-container:hover .estrela {
+    color: #4dffc3; /* Verde claro no hover */
+}
+
+/* Ajuste o hover dos cards de ação (Vídeo e Wiki) */
+.sala-card.video-card:hover {
+    background-color: var(--cor-card-acento);
+}
+.sala-card.wiki-card:hover {
+    background-color: #E6FFE6; /* Fundo verde muito suave no hover */
+    border-color: var(--cor-acento);
+}

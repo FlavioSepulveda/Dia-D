@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interativo do Evento Escolar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>🗺️ Guia Interativo do Evento Escolar</h1>
+        <p>Selecione uma sala abaixo para ver o vídeo de apresentação do professor!</p>
+    </header>
+    </header>
+
+    <div id="barra-pesquisa">
+        <input type="text" id="input-pesquisa" placeholder="🔍 Pesquisar por Sala, Professor ou Tema...">
+    </div>
+
+    <main id="container-salas">
+        </main>
+
+    <main id="container-salas">
+        </main>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="fechar-modal">&times;</span>
+            <h2 id="modal-titulo"></h2>
+            <p id="modal-professor"></p>
+            <div id="video-embed-container">
+                </div>
+        </div>
+    <div id="modal-wiki" class="modal">
+        <div class="modal-content">
+            <span class="fechar-modal-wiki">&times;</span>
+            <h2 id="wiki-titulo"></h2>
+            <p id="wiki-professor"></p>
+            <div id="wiki-conteudo">
+                <h3>Seção 1: Introdução</h3>
+                <p>Este é o espaço reservado para a documentação detalhada do projeto da turma. Você pode usar HTML básico aqui (parágrafos, listas, negrito).</p>
+                
+                <h3>Seção 2: Objetivos</h3>
+                <ul>
+                    <li>Detalhe os objetivos da turma.</li>
+                    <li>Liste os materiais utilizados.</li>
+                </ul>
+                
+                <p style="margin-top: 15px; font-weight: bold; color: var(--cor-principal);">Lembre-se de substituir este texto pelo seu conteúdo real da Wiki.</p>
+            </div>
+        </div>
+</div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki do Projeto - CETI EPT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="padding-top: 20px;"> 
+    <header>
+        <h1>📖 Wiki do Projeto</h1>
+        <p>Documentação Detalhada do Curso Técnico</p>
+    </header>
+
+    <div id="wiki-nav">
+        <button id="btn-voltar" style="padding: 10px 20px; background-color: #f0f0f0; border: none; border-radius: 5px; margin-bottom: 20px; cursor: pointer; color: #333;">⬅️ Voltar ao Guia Principal</button>
+    </div>
+
+    <main id="wiki-page-content" class="secao-ano">
+        </main>
+    
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const idProjeto = params.get('id');
+            const contentContainer = document.getElementById('wiki-page-content');
+
+            if (!idProjeto) {
+                contentContainer.innerHTML = '<h2>Erro</h2><p>ID do projeto não fornecido.</p>';
+                return;
+            }
+
+            // A função encontrarProjetoPorId está definida no script.js
+            const projeto = encontrarProjetoPorId(idProjeto);
+
+            if (!projeto) {
+                contentContainer.innerHTML = `<h2>Erro</h2><p>Projeto com ID "${idProjeto}" não encontrado na base de dados.</p>`;
+                return;
+            }
+
+            // Injeta o conteúdo Wiki
+            contentContainer.innerHTML = `
+                <h2>${projeto.nome}</h2>
+                <p>Professor(a) Responsável: ${projeto.professor}</p>
+                <hr style="margin: 15px 0;">
+                ${projeto.wikiContent}
+            `;
+            
+            // Adiciona a funcionalidade ao botão de voltar
+            document.getElementById('btn-voltar').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
