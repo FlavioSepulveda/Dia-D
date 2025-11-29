@@ -1,265 +1,402 @@
-// script.js (versão corrigida e defensiva)
-// - não sobrescreve window.estruturaEventos se já existir
-// - tenta carregar ./estruturaEventos.json antes de usar fallback
-// - exibe fotoTurma se fornecida
+// --- 1. Base de Dados: Estrutura hierárquica por Ano/Turma ---
 
-const IMAGEM_PADRAO = ''; // coloque uma URL padrão se quiser
+const IMAGEM_PADRAO = 'URL_DA_SUA_FOTO_PADRAO_AQUI.jpg'; 
 
+// Função auxiliar para criar um ID único e consistente (MANTIDA)
 function gerarIdUnico(nome, ano) {
-  return (ano + '-' + nome).replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+    return (ano + '-' + nome).replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
 }
 
-// Se já existe um estruturaEventos definido globalmente (por outro script), usa ele.
-// Caso contrário, vamos tentar carregar de um JSON externo e depois cair em fallback.
-async function obterEstruturaEventos() {
-  if (window.estruturaEventos && Array.isArray(window.estruturaEventos)) {
-    return window.estruturaEventos;
-  }
-
-  // tenta carregar um JSON externo (opcional). Se não existir, cai no fallback.
-  const caminhosPossiveis = [
-    './estruturaEventos.json',
-    './dados/estruturaEventos.json',
-    './data/estruturaEventos.json',
-    './estruturaeventos.json'
-  ];
-
-  for (const caminho of caminhosPossiveis) {
-    try {
-      const resp = await fetch(caminho, { cache: 'no-store' });
-      if (resp.ok) {
-        const dados = await resp.json();
-        // marca no window para possíveis usos futuros
-        window.estruturaEventos = dados;
-        return dados;
-      }
-    } catch (err) {
-      // ignora e continua tentando outros caminhos
-    }
-  }
-
-  // Fallback: dados de exemplo (somente para garantir que a UI funcione).
-  // Substitua por seus dados reais ou, preferencialmente, adicione um arquivo JSON no repositório.
-  const fallback = [
+const estruturaEventos = [
+    // --- 1º ANO A: JOGOS DIGITAIS ---
     {
-      ano: "1º Ano A",
-      professorResponsavel: "Antonio Flavio",
-      descricao: "Exploração da área de Jogos Digitais.",
-      fotoTurma: IMAGEM_PADRAO,
-      projetos: [
-        { tipo: "video", nome: "Projeto de Jogos: Apresentação", professor: "Prof. Antônio Flávio", youtubeID: "dQw4w9WgXcQ", idUnico: gerarIdUnico("video-jogos","1A") },
-        { tipo: "wiki", nome: "Wiki do Curso: Jogos Digitais", professor: "Prof. Antônio Flávio", idUnico: gerarIdUnico("wiki-jogos","1A"), wikiContent: "<h3>Ementa</h3><p>Exemplo...</p>" }
-      ]
+        ano: "1º Ano A",
+        professorResponsavel: "Antonio Flavio", 
+        fotoTurma: IMAGEM_PADRAO,
+        descricao: "Exploração de projetos e conceitos relacionados à área de **Jogos Digitais**.",
+        projetos: [
+            { tipo: "video", nome: "Projeto de Jogos: Apresentação", professor: "Prof. Antônio Flávio", youtubeID: "ID_VIDEO_1A_JOGOS", idUnico: gerarIdUnico("video-jogos", "1A") },
+            { tipo: "wiki", nome: "Wiki do Curso: Jogos Digitais", professor: "Prof. Antônio Flávio", youtubeID: null, idUnico: gerarIdUnico("wiki-jogos", "1A"), 
+                wikiContent: `
+                    <h3>🎮 Ementa de Jogos Digitais</h3>
+                    <p>A turma desenvolveu protótipos de jogos focados em narrativa e usabilidade. O projeto final foi um jogo 2D com temática de sustentabilidade.</p>
+                    <h4>Tecnologias Utilizadas</h4>
+                    <ul>
+                        <li>Motor Unity.</li>
+                        <li>Linguagem C#.</li>
+                        <li>Design de Personagens (Pixel Art).</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 1º A** - Substitua este HTML pelo texto real da Wiki.</p>
+                `
+            } 
+        ]
     },
+    // --- 1º ANO B: MARKETING DIGITAL ---
     {
-      ano: "2º Ano A",
-      professorResponsavel: "Aroldo",
-      descricao: "Informática para Web",
-      fotoTurma: IMAGEM_PADRAO,
-      projetos: [
-        { tipo: "video", nome: "Projeto Web: Frontend", professor: "Prof. Aroldo", youtubeID: "dQw4w9WgXcQ", idUnico: gerarIdUnico("video-front","2A") },
-        { tipo: "wiki", nome: "Wiki: Web Design", professor: "Prof. Aroldo", idUnico: gerarIdUnico("wiki-web","2A"), wikiContent: "<p>Conteúdo exemplo</p>" }
-      ]
+        ano: "1º Ano B",
+        professorResponsavel: "Ananda", 
+        fotoTurma: IMAGEM_PADRAO,
+        descricao: "Exploração de projetos e conceitos relacionados à área de **Marketing Digital**.",
+        projetos: [
+            { tipo: "video", nome: "Projeto de Marketing: Apresentação", professor: "Prof. Ananda", youtubeID: "ID_VIDEO_1B_MARKETING", idUnico: gerarIdUnico("video-marketing", "1B") },
+            { tipo: "wiki", nome: "Wiki do Curso: Marketing Digital", professor: "Prof. Ananda", youtubeID: null, idUnico: gerarIdUnico("wiki-marketing", "1B"),
+                wikiContent: `
+                    <h3>📈 Estratégias Digitais</h3>
+                    <p>Foco na criação de campanhas de tráfego pago e orgânico. O projeto incluiu a criação de uma persona de cliente e um funil de vendas completo.</p>
+                    <h4>Tópicos Chave</h4>
+                    <ul>
+                        <li>SEO (Otimização para Busca).</li>
+                        <li>Análise de Métricas (ROI).</li>
+                        <li>Copywriting.</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 1º B** - Substitua este HTML pelo texto real da Wiki.</p>
+                `
+            }
+        ]
+    },
+    // --- 2º ANO A: INFORMÁTICA PARA WEB ---
+    {
+        ano: "2º Ano A",
+        professorResponsavel: "Aroldo", 
+        fotoTurma: IMAGEM_PADRAO,
+        descricao: "Exploração de projetos e conceitos relacionados à área de **Informática para Web**.",
+        projetos: [
+            { tipo: "video", nome: "Projeto Web: Frontend e Design", professor: "Prof. Aroldo", youtubeID: "ID_VIDEO_2A_WEB_FRONT", idUnico: gerarIdUnico("video-front", "2A") },
+            { tipo: "wiki", nome: "Wiki do Curso: Web Design", professor: "Prof. Aroldo", youtubeID: null, idUnico: gerarIdUnico("wiki-web", "2A"),
+                wikiContent: `
+                    <h3>🌐 Design e Responsividade</h3>
+                    <p>Os alunos trabalharam na parte visual e de interação dos websites, garantindo que o design fosse responsivo (funcionasse em celulares) e acessível.</p>
+                    <h4>Tecnologias Utilizadas</h4>
+                    <ul>
+                        <li>HTML5 e CSS3.</li>
+                        <li>Frameworks como Bootstrap.</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 2º A** - Substitua este HTML pelo texto real da Wiki.</p>
+                `
+            }
+        ]
+    },
+    // --- 2º ANO B: INFORMÁTICA PARA WEB ---
+    {
+        ano: "2º Ano B",
+        professorResponsavel: "Edkleverson", 
+        fotoTurma: IMAGEM_PADRAO,
+        descricao: "Exploração de projetos e conceitos relacionados à área de **Informática para Web**.",
+        projetos: [
+            { tipo: "video", nome: "Projeto Web: Backend e Banco de Dados", professor: "Prof. Edkleverson", youtubeID: "ID_VIDEO_2B_WEB_BACK", idUnico: gerarIdUnico("video-back", "2B") },
+            { tipo: "wiki", nome: "Wiki do Curso: Programação Web", professor: "Prof. Edkleverson", youtubeID: null, idUnico: gerarIdUnico("wiki-prog", "2B"),
+                wikiContent: `
+                    <h3>⚙️ Servidores e Banco de Dados</h3>
+                    <p>Foco na lógica de negócios, segurança e manipulação de dados em aplicações web. O projeto final foi um sistema de cadastro e login funcional.</p>
+                    <h4>Tecnologias Utilizadas</h4>
+                    <ul>
+                        <li>Linguagem Node.js.</li>
+                        <li>Banco de Dados SQL.</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 2º B** - Substitua este HTML pelo texto real da Wiki.</p>
+                `
+            }
+        ]
+    },
+    // --- 3º ANO: INTELIGÊNCIA ARTIFICIAL (GUIA) ---
+    {
+        ano: "3º Ano - Inteligência Artificial",
+        professorResponsavel: "Fabiana", 
+        fotoTurma: IMAGEM_PADRAO,
+        descricao: "O 3º ano apresenta um guia de projetos avançados focados em **Inteligência Artificial**. Clique para explorar as três salas temáticas (A, B e C).",
+        projetos: [
+            { 
+                tipo: "guia-principal", 
+                nome: "Abrir Guia de Salas de Inteligência Artificial", 
+                professor: "Prof. Fabiana", 
+                youtubeID: null,
+                idUnico: gerarIdUnico("guia-principal-ia", "3"),
+                subGuias: [
+                    { 
+                        nome: "Sala 3º A: Machine Learning", 
+                        professor: "Prof. Fabiana", 
+                        projetos: [
+                            { tipo: "video", nome: "Vídeo Apresentação (ML)", professor: "Prof. Fabiana", youtubeID: "ID_VIDEO_3A_ML", idUnico: gerarIdUnico("video-ml", "3A") },
+                            { tipo: "wiki", nome: "Wiki do Projeto (ML)", professor: "Prof. Fabiana", youtubeID: null, idUnico: gerarIdUnico("wiki-ml", "3A"),
+                                wikiContent: `
+                                    <h3>🤖 Machine Learning (Aprendizado de Máquina)</h3>
+                                    <p>Estudo de algoritmos que permitem aos computadores aprender com dados para fazer previsões ou decisões.</p>
+                                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 3º A (ML)** - Substitua este HTML pelo texto real da Wiki.</p>
+                                `
+                            }
+                        ]
+                    },
+                    { 
+                        nome: "Sala 3º B: Visão Computacional", 
+                        professor: "Prof. Fabiana", 
+                        projetos: [
+                            { tipo: "video", nome: "Vídeo Apresentação (VC)", professor: "Prof. Fabiana", youtubeID: "ID_VIDEO_3B_VC", idUnico: gerarIdUnico("video-vc", "3B") },
+                            { tipo: "wiki", nome: "Wiki do Projeto (VC)", professor: "Prof. Fabiana", youtubeID: null, idUnico: gerarIdUnico("wiki-vc", "3B"),
+                                wikiContent: `
+                                    <h3>👁️ Visão Computacional</h3>
+                                    <p>Desenvolvimento de sistemas capazes de processar, analisar e entender imagens digitais e vídeos. Aplicações em robótica e segurança.</p>
+                                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 3º B (VC)** - Substitua este HTML pelo texto real da Wiki.</p>
+                                `
+                            }
+                        ]
+                    },
+                    { 
+                        nome: "Sala 3º C: Processamento de Linguagem Natural", 
+                        professor: "Prof. Fabiana", 
+                        projetos: [
+                            { tipo: "video", nome: "Vídeo Apresentação (PLN)", professor: "Prof. Fabiana", youtubeID: "ID_VIDEO_3C_PLN", idUnico: gerarIdUnico("video-pln", "3C") },
+                            { tipo: "wiki", nome: "Wiki do Projeto (PLN)", professor: "Prof. Fabiana", youtubeID: null, idUnico: gerarIdUnico("wiki-pln", "3C"),
+                                wikiContent: `
+                                    <h3>💬 Processamento de Linguagem Natural (PLN)</h3>
+                                    <p>Estudo focado em como os computadores podem entender e gerar linguagem humana. Base para Chatbots e tradução automática.</p>
+                                    <p style="margin-top: 15px; color: var(--cor-acento);">**Conteúdo do 3º C (PLN)** - Substitua este HTML pelo texto real da Wiki.</p>
+                                `
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
-    // remova este fallback quando tiver seus dados reais
-  ];
+];
 
-  window.estruturaEventos = fallback;
-  return fallback;
-}
+// --- Função para buscar qualquer projeto por ID (Mantida) ---
+function encontrarProjetoPorId(idDesejado, estrutura = estruturaEventos) {
+    for (const secao of estrutura) {
+        // 1. Verifica projetos diretos
+        const projetoEncontrado = secao.projetos.find(p => p.idUnico === idDesejado);
+        if (projetoEncontrado) return projetoEncontrado;
 
-function encontrarProjetoPorId(idDesejado, estrutura = window.estruturaEventos || []) {
-  for (const secao of estrutura) {
-    const projetoEncontrado = (secao.projetos || []).find(p => p.idUnico === idDesejado);
-    if (projetoEncontrado) return projetoEncontrado;
-
-    // procura em subGuias, se existir
-    for (const projeto of (secao.projetos || [])) {
-      if (projeto.subGuias && Array.isArray(projeto.subGuias)) {
-        for (const sub of projeto.subGuias) {
-          const encontrado = (sub.projetos || []).find(p => p.idUnico === idDesejado);
-          if (encontrado) return encontrado;
+        // 2. Verifica projetos dentro de subGuias (3º ano)
+        if (secao.projetos[0] && secao.projetos[0].subGuias) {
+            for (const subGuia of secao.projetos[0].subGuias) {
+                const subProjetoEncontrado = subGuia.projetos.find(p => p.idUnico === idDesejado);
+                if (subProjetoEncontrado) return subProjetoEncontrado;
+            }
         }
-      }
     }
-  }
-  return null;
+    return null; 
 }
 
-function criarCardProjeto(projeto) {
-  const card = document.createElement('div');
-  card.className = 'sala-card';
-  card.setAttribute('data-id-projeto', projeto.idUnico || '');
-  card.setAttribute('data-tipo', projeto.tipo || '');
+// --- 2. Funções de Manipulação da Interface ---
 
-  const tituloCard = document.createElement('h3');
-  tituloCard.textContent = projeto.nome || 'Projeto';
-  card.appendChild(tituloCard);
+// Função principal de renderização (LIMPA de listeners e Avaliação)
+function gerarListaDeSalas(data, containerId = 'container-salas') {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; 
 
-  const profCard = document.createElement('p');
-  profCard.textContent = `Professor(a): ${projeto.professor || ''}`;
-  card.appendChild(profCard);
+    document.querySelector('header h1').textContent = "CETI Padre Antônio José do Rego";
+    document.querySelector('header p').textContent = "Seja bem-vindo(a) ao Dia D da EPT!";
 
-  const btn = document.createElement('button');
-  if (projeto.tipo === 'video') {
-    btn.textContent = 'ASSISTIR VÍDEO';
-    btn.addEventListener('click', (e) => { e.stopPropagation(); abrirModalVideoPorId(projeto.idUnico); });
-  } else if (projeto.tipo === 'wiki') {
-    btn.textContent = 'VER WIKI';
-    btn.addEventListener('click', (e) => { e.stopPropagation(); abrirModalWikiPorId(projeto.idUnico); });
-  } else if (projeto.tipo === 'guia-principal') {
-    btn.textContent = 'ABRIR GUIA';
-    btn.addEventListener('click', (e) => { e.stopPropagation(); /* implementar se necessário */ });
-  } else {
-    btn.textContent = 'ABRIR';
-  }
-  card.appendChild(btn);
+    data.forEach(secao => {
+        const secaoDiv = document.createElement('div');
+        secaoDiv.className = 'secao-ano';
 
-  return card;
-}
+        secaoDiv.innerHTML = `
+            <div class="secao-header">
+                <img src="${secao.fotoTurma}" alt="Foto da Turma ${secao.ano}" class="foto-turma">
+                <div class="secao-info">
+                    <h2>${secao.ano}</h2>
+                    <p class="descricao-projeto">${secao.descricao}</p>
+                    <p class="professor-responsavel">Professor Responsável: ${secao.professorResponsavel}</p>
+                </div>
+            </div>
+            <div class="cards-container" id="cards-${secao.ano.replace(/\s/g, '-')}">
+            </div>
+        `;
+        container.appendChild(secaoDiv);
 
-function renderizarSecao(secao) {
-  const secaoDiv = document.createElement('div');
-  secaoDiv.className = 'secao-ano';
+        const cardsContainer = secaoDiv.querySelector('.cards-container');
 
-  const titulo = document.createElement('h2');
-  titulo.textContent = secao.ano || 'Ano';
-  secaoDiv.appendChild(titulo);
+        // Loop de criação dos cards
+        secao.projetos.forEach(projeto => {
+            const card = document.createElement('div');
+            
+            // Adicionamos classes de identificação para o Event Delegation
+            card.setAttribute('data-id-projeto', projeto.idUnico); 
+            card.setAttribute('data-tipo', projeto.tipo);
 
-  // Foto da turma (se existir)
-  if (secao.fotoTurma || IMAGEM_PADRAO) {
-    const img = document.createElement('img');
-    img.src = secao.fotoTurma || IMAGEM_PADRAO;
-    img.alt = `${secao.ano || 'Turma'} - foto`;
-    img.style.maxWidth = '100%';
-    img.style.borderRadius = '8px';
-    img.style.objectFit = 'cover';
-    img.style.height = '120px';
-    secaoDiv.appendChild(img);
-  }
+            if (projeto.tipo === "video") {
+                card.className = 'sala-card video-card';
+                card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">📺 ASSISTIR VÍDEO</p>`;
+                
+            } else if (projeto.tipo === "wiki") {
+                card.className = 'sala-card wiki-card';
+                card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold; color: var(--cor-principal);">📖 VER WIKI</p>`;
+                
+            } else if (projeto.tipo === "guia-principal") {
+                card.className = 'sala-card video-card guia-btn'; // Adiciona classe guia-btn para distinguir
+                card.innerHTML = `<h3>${projeto.nome}</h3><p>${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">➡️ CLIQUE PARA ABRIR O GUIA</p>`;
+                
+                // O Listener do guia principal DEVE permanecer aqui, pois ele muda a estrutura.
+                card.addEventListener('click', () => abrirSubGuia(secao));
+            }
+            
+            // REMOVIDO: Adiciona o componente de avaliação
+            /* if (projeto.tipo !== "guia-principal") {
+                const avaliacaoDiv = renderizarAvaliacao(projeto.idUnico); 
+                card.appendChild(avaliacaoDiv);
+            } */
 
-  const desc = document.createElement('p');
-  desc.innerHTML = secao.descricao || '';
-  secaoDiv.appendChild(desc);
-
-  const prof = document.createElement('p');
-  prof.className = 'professor-responsavel';
-  prof.textContent = `Professor Responsável: ${secao.professorResponsavel || ''}`;
-  secaoDiv.appendChild(prof);
-
-  // Container de cards
-  const cardsContainer = document.createElement('div');
-  cardsContainer.className = 'cards-container';
-  (secao.projetos || []).forEach(projeto => {
-    const card = criarCardProjeto(projeto);
-    cardsContainer.appendChild(card);
-  });
-
-  secaoDiv.appendChild(cardsContainer);
-  return secaoDiv;
-}
-
-function gerarListaDeSalasNaPagina(data, containerId = 'container-salas') {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = '';
-
-  // atualiza header (opcional)
-  const headerH1 = document.querySelector('header h1');
-  const headerP = document.querySelector('header p');
-  if (headerH1) headerH1.textContent = "CETI Padre Antônio José do Rego";
-  if (headerP) headerP.textContent = "Seja bem-vindo(a) ao Dia D da EPT!";
-
-  data.forEach(secao => {
-    const secaoNode = renderizarSecao(secao);
-    container.appendChild(secaoNode);
-  });
-}
-
-function adicionarFiltro() {
-  const input = document.getElementById('input-pesquisa');
-  if (!input) return;
-  input.addEventListener('input', function () {
-    const filtro = this.value.toLowerCase();
-    const secoes = document.querySelectorAll('.secao-ano');
-    secoes.forEach(secao => {
-      let visivel = false;
-      const textoSecao = secao.textContent.toLowerCase();
-      if (textoSecao.includes(filtro)) visivel = true;
-      secao.querySelectorAll('.sala-card').forEach(card => {
-        const textoCard = card.textContent.toLowerCase();
-        if (textoCard.includes(filtro)) {
-          card.style.display = 'block';
-          visivel = true;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-      secao.style.display = (visivel || filtro === '') ? 'flex' : 'none';
+            cardsContainer.appendChild(card);
+        });
     });
-  });
 }
 
+// REMOVIDO: Função renderizarAvaliacao()
+// REMOVIDO: Função salvarAvaliacao()
+
+// Função para o filtro em tempo real (mantida)
+function adicionarFiltro() {
+    const input = document.getElementById('input-pesquisa');
+    
+    input.addEventListener('keyup', function() {
+        const filtro = this.value.toLowerCase();
+        const secoes = document.querySelectorAll('.secao-ano');
+
+        secoes.forEach(secao => {
+            let visivel = false;
+            const textoSecao = secao.textContent.toLowerCase();
+            
+            if (textoSecao.includes(filtro)) {
+                visivel = true;
+            }
+            
+            secao.querySelectorAll('.sala-card').forEach(card => {
+                const textoCard = card.textContent.toLowerCase();
+                if (textoCard.includes(filtro)) {
+                    card.style.display = 'block'; 
+                    visivel = true; 
+                } else {
+                    card.style.display = 'none'; 
+                }
+            });
+            
+            if (visivel || filtro === '') {
+                secao.style.display = 'flex'; 
+            } else {
+                secao.style.display = 'none';
+            }
+        });
+    });
+}
+
+// Funções de Modal
+function abrirSubGuia(secao) {
+    const containerPrincipal = document.getElementById('container-salas');
+    containerPrincipal.innerHTML = ''; 
+
+    const btnVoltar = document.createElement('button');
+    btnVoltar.textContent = "⬅️ Voltar ao Guia Principal";
+    btnVoltar.style.cssText = "padding: 10px 20px; background-color: #f0f0f0; border: none; border-radius: 5px; margin-bottom: 20px; cursor: pointer; color: #333;";
+    btnVoltar.addEventListener('click', () => {
+        // Redefine a lista principal de eventos
+        gerarListaDeSalas(estruturaEventos); 
+    });
+    containerPrincipal.appendChild(btnVoltar);
+
+    const dadosSubGuia = secao.projetos[0].subGuias.map(sub => ({
+        ano: sub.nome, 
+        professorResponsavel: sub.professor,
+        fotoTurma: IMAGEM_PADRAO,
+        descricao: `Assista à explicação do professor sobre o foco da sala: ${sub.professor}`,
+        projetos: sub.projetos 
+    }));
+    
+    gerarListaDeSalas(dadosSubGuia, 'container-salas');
+}
+
+// --- Funções de Abertura do Modal/Página por ID ---
 function abrirModalVideoPorId(idProjeto) {
-  const projeto = encontrarProjetoPorId(idProjeto);
-  if (!projeto || !projeto.youtubeID) {
-    alert('Vídeo não disponível para este projeto.');
-    return;
-  }
-  const modal = document.getElementById('modal-video');
-  const videoContainer = document.getElementById('video-embed-container');
-  if (!modal || !videoContainer) return;
+    const projeto = encontrarProjetoPorId(idProjeto);
+    if (!projeto || !projeto.youtubeID) return;
 
-  videoContainer.innerHTML = '';
-  const iframe = document.createElement('iframe');
-  iframe.width = "100%";
-  iframe.height = "400";
-  iframe.src = `https://www.youtube.com/embed/${projeto.youtubeID}`;
-  iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-  iframe.allowFullscreen = true;
-
-  videoContainer.appendChild(iframe);
-  modal.style.display = 'flex';
+    const modal = document.getElementById('modal');
+    const titulo = document.getElementById('modal-titulo');
+    const professor = document.getElementById('modal-professor');
+    const videoContainer = document.getElementById('video-embed-container');
+    
+    titulo.textContent = projeto.nome;
+    professor.textContent = `Professor(a): ${projeto.professor}`;
+    
+    const iframeHTML = `<iframe src="https://www.youtube.com/embed/${projeto.youtubeID}?autoplay=1&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    
+    videoContainer.innerHTML = iframeHTML;
+    modal.style.display = 'block';
 }
+
+// *************** CORREÇÃO DEFINITIVA (REDIRECIONAMENTO) ***************
+function abrirModalWikiPorId(idProjeto) {
+    const projeto = encontrarProjetoPorId(idProjeto);
+    
+    if (!projeto || !projeto.wikiContent) {
+        alert("O conteúdo da Wiki para este projeto ainda não foi preenchido ou o projeto não foi encontrado.");
+        return;
+    }
+    
+    // REDIRECIONA o navegador para a nova página, passando o ID na query string
+    window.location.href = `wiki.html?id=${idProjeto}`;
+}
+// ********************************************************************************
 
 function fecharModalVideo() {
-  const modal = document.getElementById('modal-video');
-  const videoContainer = document.getElementById('video-embed-container');
-  if (videoContainer) videoContainer.innerHTML = '';
-  if (modal) modal.style.display = 'none';
+    const modal = document.getElementById('modal');
+    const videoContainer = document.getElementById('video-embed-container');
+    videoContainer.innerHTML = ''; 
+    modal.style.display = 'none';
 }
 
-function abrirModalWikiPorId(idProjeto) {
-  const projeto = encontrarProjetoPorId(idProjeto);
-  if (!projeto || !projeto.wikiContent) {
-    alert('Conteúdo da Wiki não disponível.');
-    return;
-  }
-  // redireciona para wiki.html com query, conforme seu fluxo
-  window.location.href = `wiki.html?id=${idProjeto}`;
+// REMOVIDO: Função fecharModalWiki() não é mais necessária já que o modal não existe.
+
+
+// --- 3. Inicialização e Eventos de Fechamento ---
+
+// Função que aplica a Delegação de Eventos (Ouvinte único para os cards)
+function delegarEventosDeClique() {
+    const container = document.getElementById('container-salas');
+    
+    // ANEXA APENAS UM LISTENER AO CONTÊINER PRINCIPAL
+    container.addEventListener('click', (event) => {
+        const card = event.target.closest('.sala-card');
+        
+        // Ignora cliques que não são em um cartão ou se for o botão do Guia Principal
+        if (!card || card.classList.contains('guia-btn')) return;
+
+        const idProjeto = card.getAttribute('data-id-projeto');
+        const tipoAcao = card.getAttribute('data-tipo');
+
+        if (tipoAcao === 'video') {
+            abrirModalVideoPorId(idProjeto);
+        } else if (tipoAcao === 'wiki') {
+            // Chama a função que agora REDIRECIONA
+            abrirModalWikiPorId(idProjeto);
+        }
+    });
 }
 
-// Inicialização principal
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const dados = await obterEstruturaEventos();
-    // garante que a variável global window.estruturaEventos exista
-    window.estruturaEventos = dados;
 
-    gerarListaDeSalasNaPagina(dados);
-    adicionarFiltro();
-
-    const fecharBtn = document.getElementById('fechar-modal-video');
-    if (fecharBtn) fecharBtn.addEventListener('click', fecharModalVideo);
+document.addEventListener('DOMContentLoaded', () => {
+    // Garante que a renderização só ocorra na página inicial
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        gerarListaDeSalas(estruturaEventos); 
+        adicionarFiltro(); 
+        delegarEventosDeClique(); 
+    }
+    
+    // Configuração dos eventos de fechamento (apenas para o modal de vídeo)
+    const fecharModalBtn = document.querySelector('.fechar-modal');
+    if (fecharModalBtn) fecharModalBtn.addEventListener('click', fecharModalVideo);
+    
     window.addEventListener('click', (event) => {
-      const modal = document.getElementById('modal-video');
-      if (modal && event.target === modal) fecharModalVideo();
+        const modalVideo = document.getElementById('modal');
+        if (modalVideo && event.target == modalVideo) {
+            fecharModalVideo();
+        }
     });
-    document.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape') fecharModalVideo();
+    
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            fecharModalVideo();
+        }
     });
-  } catch (err) {
-    console.error('Erro ao inicializar a interface:', err);
-  }
 });
