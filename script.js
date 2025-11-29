@@ -219,7 +219,7 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
                 card.className = 'sala-card video-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">📺 ASSISTIR VÍDEO</p>`;
                 
-                // Retornando ao método antigo, mas com IDs para segurança
+                // Anexa o listener de clique
                 const idProjeto = projeto.idUnico;
                 card.addEventListener('click', () => abrirModalVideoPorId(idProjeto)); 
                 
@@ -227,12 +227,12 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
                 card.className = 'sala-card wiki-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold; color: var(--cor-principal);">📖 VER WIKI</p>`;
                 
-                // Retornando ao método antigo, mas com IDs para segurança
+                // Anexa o listener de clique
                 const idProjeto = projeto.idUnico;
                 card.addEventListener('click', () => abrirModalWikiPorId(idProjeto)); 
                 
             } else if (projeto.tipo === "guia-principal") {
-                card.className = 'sala-card video-card guia-btn'; 
+                card.className = 'sala-card video-card guia-btn';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">➡️ CLIQUE PARA ABRIR O GUIA</p>`;
                 
                 card.addEventListener('click', () => abrirSubGuia(secao));
@@ -340,4 +340,36 @@ function abrirModalWikiPorId(idProjeto) {
 
 function fecharModalVideo() {
     const modal = document.getElementById('modal');
-    const videoContainer = document.getElementById('video-embed-container
+    const videoContainer = document.getElementById('video-embed-container');
+    videoContainer.innerHTML = ''; 
+    modal.style.display = 'none'; // Linha que faltava fechar a função
+}
+
+
+// --- 3. Inicialização e Eventos de Fechamento ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Garante que a renderização só ocorra na página inicial
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        gerarListaDeSalas(estruturaEventos); 
+        adicionarFiltro(); 
+        // Os listeners de clique dos cards já estão no loop gerarListaDeSalas.
+    }
+    
+    // Configuração dos eventos de fechamento (apenas para o modal de vídeo)
+    const fecharModalBtn = document.querySelector('.fechar-modal');
+    if (fecharModalBtn) fecharModalBtn.addEventListener('click', fecharModalVideo);
+    
+    window.addEventListener('click', (event) => {
+        const modalVideo = document.getElementById('modal');
+        if (modalVideo && event.target == modalVideo) {
+            fecharModalVideo();
+        }
+    });
+    
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            fecharModalVideo();
+        }
+    });
+});
