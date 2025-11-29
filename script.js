@@ -13,7 +13,7 @@ const estruturaEventos = [
         ano: "1º Ano A",
         professorResponsavel: "Antonio Flavio", 
         fotoTurma: IMAGEM_PADRAO,
-        descricao: "Exploração de projetos e conceitos relacionados à área de **Jogos Digitais**.",
+        descricao: "Exploração de projetos e conceitos relacionados à área de **Jogos Digiais**.",
         projetos: [
             { tipo: "video", nome: "Projeto de Jogos: Apresentação", professor: "Prof. Antônio Flávio", youtubeID: "ID_VIDEO_1A_JOGOS", idUnico: gerarIdUnico("video-jogos", "1A") },
             { tipo: "wiki", nome: "Wiki do Curso: Jogos Digitais", professor: "Prof. Antônio Flávio", youtubeID: null, idUnico: gerarIdUnico("wiki-jogos", "1A"), 
@@ -180,7 +180,7 @@ function encontrarProjetoPorId(idDesejado, estrutura = estruturaEventos) {
 
 // --- 2. Funções de Manipulação da Interface ---
 
-// Função principal de renderização (Listeners no Loop)
+// Função principal de renderização 
 function gerarListaDeSalas(data, containerId = 'container-salas') {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; 
@@ -227,7 +227,7 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
                 card.className = 'sala-card wiki-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold; color: var(--cor-principal);">📖 VER WIKI</p>`;
                 
-                // Anexa o listener de clique
+                // Anexa o listener de clique (Redirecionamento)
                 const idProjeto = projeto.idUnico;
                 card.addEventListener('click', () => abrirModalWikiPorId(idProjeto)); 
                 
@@ -237,8 +237,6 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
                 
                 card.addEventListener('click', () => abrirSubGuia(secao));
             }
-            
-            // REMOVIDO: Avaliação
             
             cardsContainer.appendChild(card);
         });
@@ -342,7 +340,7 @@ function fecharModalVideo() {
     const modal = document.getElementById('modal');
     const videoContainer = document.getElementById('video-embed-container');
     videoContainer.innerHTML = ''; 
-    modal.style.display = 'none'; // Linha que faltava fechar a função
+    modal.style.display = 'none'; // CORREÇÃO: Fechamento da função
 }
 
 
@@ -353,7 +351,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
         gerarListaDeSalas(estruturaEventos); 
         adicionarFiltro(); 
-        // Os listeners de clique dos cards já estão no loop gerarListaDeSalas.
     }
     
     // Configuração dos eventos de fechamento (apenas para o modal de vídeo)
