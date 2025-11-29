@@ -4,12 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Guia Interativo do Evento Escolar</title>
-
-  <!-- link para seu CSS (verifique o nome/case) -->
   <link rel="stylesheet" href="./style.css" />
-
-  <!-- carrega o script só depois do DOM (defer) -->
   <script src="./script.js" defer></script>
+  <style>
+    /* estilos mínimos para visualizar enquanto seu style.css não é carregado */
+    body { font-family: Arial, sans-serif; background:#eef2f5; color:#222; margin:0; padding:20px; }
+    header { background:#0b2540; color:#fff; padding:28px; border-radius:12px; text-align:center; }
+    header p { color:#34d2b6; font-style:italic; margin-top:6px; }
+    #barra-pesquisa { margin:26px auto; display:flex; justify-content:center; }
+    #input-pesquisa { width:92%; max-width:760px; padding:14px 18px; border-radius:40px; border:6px solid #2b6; outline:none; font-size:16px; background:#fff; box-shadow: 0 6px 0 rgba(0,0,0,0.06) inset; }
+    #container-salas { margin-top:18px; display:flex; flex-direction:column; gap:18px; align-items:center; }
+    .secao-ano { width:92%; max-width:900px; background:#fff; padding:16px; border-radius:12px; box-shadow:0 8px 30px rgba(2,10,30,0.06); display:flex; flex-direction:column; gap:12px; }
+    .cards-container { display:flex; gap:12px; flex-wrap:wrap; }
+    .sala-card { min-width:180px; padding:12px; border-radius:10px; background:#f7fafc; box-shadow:0 6px 18px rgba(0,0,0,0.04); cursor:pointer; }
+    footer { text-align:center; margin:40px 0; color:#444; }
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:1000; }
+    .modal-content { width:95%; max-width:900px; background:#fff; padding:18px; border-radius:10px; position:relative; }
+    .fechar-modal { position:absolute; right:12px; top:8px; cursor:pointer; font-size:22px; }
+  </style>
 </head>
 <body>
   <header>
@@ -18,34 +30,23 @@
   </header>
 
   <main>
-    <!-- Barra de pesquisa -->
     <section id="barra-pesquisa">
       <input id="input-pesquisa" placeholder="🔍 Pesquisar por Sala, Professor ou Tema" />
     </section>
 
-    <!-- Aqui o seu script deve injetar todas as seções (1º ano, cards, etc) -->
     <section id="container-salas" aria-live="polite">
-      <!-- conteúdo montado por script.js -->
+      <!-- Conteúdo injetado por script.js -->
     </section>
   </main>
 
-  <!-- Modal do vídeo -->
   <div id="modal-video" class="modal" role="dialog" aria-hidden="true">
     <div class="modal-content">
       <span class="fechar-modal" id="fechar-modal-video" aria-label="Fechar">×</span>
-      <div id="video-embed-container"><!-- iframe será inserido aqui --></div>
+      <div id="video-embed-container"></div>
     </div>
   </div>
 
-  <!-- Modal da wiki -->
-  <div id="modal-wiki" class="modal" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-      <span class="fechar-modal-wiki" id="fechar-modal-wiki" aria-label="Fechar">×</span>
-      <div id="wiki-conteudo"><!-- conteúdo da wiki será inserido aqui --></div>
-    </div>
-  </div>
-
-  <footer style="text-align:center; margin:30px 0;">
+  <footer>
     <small>Guia Interativo — CETI EPT</small>
   </footer>
 </body>
