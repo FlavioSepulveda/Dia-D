@@ -1,8 +1,9 @@
 // --- 1. Base de Dados: Estrutura hierárquica por Ano/Turma ---
 
-const IMAGEM_PADRAO = 'URL_DA_SUA_FOTO_PADRAO_AQUI.jpg'; 
+const IMAGEM_PADRAO = 'https://via.placeholder.com/100'; // Placeholder temporário
+// const IMAGEM_PADRAO = 'URL_DA_SUA_FOTO_PADRAO_AQUI.jpg'; // USE ESTA LINHA COM A SUA URL REAL
 
-// Função auxiliar para criar um ID único e consistente (MANTIDA)
+// Função auxiliar para criar um ID único e consistente 
 function gerarIdUnico(nome, ano) {
     return (ano + '-' + nome).replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
 }
@@ -14,6 +15,7 @@ const estruturaEventos = [
         professorResponsavel: "Antonio Flavio", 
         fotoTurma: IMAGEM_PADRAO,
         descricao: "Exploração de projetos e conceitos relacionados à área de **Jogos Digitais**.",
+        numeroSala: "Sala 101", // NOVO: Número da sala
         projetos: [
             { tipo: "video", nome: "Projeto de Jogos: Apresentação", professor: "Prof. Antônio Flávio", youtubeID: "ID_VIDEO_1A_JOGOS", idUnico: gerarIdUnico("video-jogos", "1A") },
             { tipo: "wiki", nome: "Wiki do Curso: Jogos Digitais", professor: "Prof. Antônio Flávio", youtubeID: null, idUnico: gerarIdUnico("wiki-jogos", "1A"), 
@@ -37,6 +39,7 @@ const estruturaEventos = [
         professorResponsavel: "Ananda", 
         fotoTurma: IMAGEM_PADRAO,
         descricao: "Exploração de projetos e conceitos relacionados à área de **Marketing Digital**.",
+        numeroSala: "Sala 102", // NOVO: Número da sala
         projetos: [
             { tipo: "video", nome: "Projeto de Marketing: Apresentação", professor: "Prof. Ananda", youtubeID: "ID_VIDEO_1B_MARKETING", idUnico: gerarIdUnico("video-marketing", "1B") },
             { tipo: "wiki", nome: "Wiki do Curso: Marketing Digital", professor: "Prof. Ananda", youtubeID: null, idUnico: gerarIdUnico("wiki-marketing", "1B"),
@@ -60,6 +63,7 @@ const estruturaEventos = [
         professorResponsavel: "Aroldo", 
         fotoTurma: IMAGEM_PADRAO,
         descricao: "Exploração de projetos e conceitos relacionados à área de **Informática para Web**.",
+        numeroSala: "Sala 203", // NOVO: Número da sala
         projetos: [
             { tipo: "video", nome: "Projeto Web: Frontend e Design", professor: "Prof. Aroldo", youtubeID: "ID_VIDEO_2A_WEB_FRONT", idUnico: gerarIdUnico("video-front", "2A") },
             { tipo: "wiki", nome: "Wiki do Curso: Web Design", professor: "Prof. Aroldo", youtubeID: null, idUnico: gerarIdUnico("wiki-web", "2A"),
@@ -82,6 +86,7 @@ const estruturaEventos = [
         professorResponsavel: "Edkleverson", 
         fotoTurma: IMAGEM_PADRAO,
         descricao: "Exploração de projetos e conceitos relacionados à área de **Informática para Web**.",
+        numeroSala: "Sala 204", // NOVO: Número da sala
         projetos: [
             { tipo: "video", nome: "Projeto Web: Backend e Banco de Dados", professor: "Prof. Edkleverson", youtubeID: "ID_VIDEO_2B_WEB_BACK", idUnico: gerarIdUnico("video-back", "2B") },
             { tipo: "wiki", nome: "Wiki do Curso: Programação Web", professor: "Prof. Edkleverson", youtubeID: null, idUnico: gerarIdUnico("wiki-prog", "2B"),
@@ -104,6 +109,7 @@ const estruturaEventos = [
         professorResponsavel: "Fabiana", 
         fotoTurma: IMAGEM_PADRAO,
         descricao: "O 3º ano apresenta um guia de projetos avançados focados em **Inteligência Artificial**. Clique para explorar as três salas temáticas (A, B e C).",
+        numeroSala: "Laboratório 301", // NOVO: Número da sala
         projetos: [
             { 
                 tipo: "guia-principal", 
@@ -180,7 +186,7 @@ function encontrarProjetoPorId(idDesejado, estrutura = estruturaEventos) {
 
 // --- 2. Funções de Manipulação da Interface ---
 
-// Função principal de renderização (LIMPA de listeners e Avaliação)
+// Função principal de renderização (INCLUINDO numeroSala)
 function gerarListaDeSalas(data, containerId = 'container-salas') {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; 
@@ -196,7 +202,7 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
             <div class="secao-header">
                 <img src="${secao.fotoTurma}" alt="Foto da Turma ${secao.ano}" class="foto-turma">
                 <div class="secao-info">
-                    <h2>${secao.ano}</h2>
+                    <h2>${secao.ano} <span class="numero-sala">(${secao.numeroSala})</span></h2> 
                     <p class="descricao-projeto">${secao.descricao}</p>
                     <p class="professor-responsavel">Professor Responsável: ${secao.professorResponsavel}</p>
                 </div>
@@ -212,7 +218,6 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
         secao.projetos.forEach(projeto => {
             const card = document.createElement('div');
             
-            // Adicionamos classes de identificação para o Event Delegation
             card.setAttribute('data-id-projeto', projeto.idUnico); 
             card.setAttribute('data-tipo', projeto.tipo);
 
@@ -220,31 +225,27 @@ function gerarListaDeSalas(data, containerId = 'container-salas') {
                 card.className = 'sala-card video-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">📺 ASSISTIR VÍDEO</p>`;
                 
+                const idProjeto = projeto.idUnico;
+                card.addEventListener('click', () => abrirModalVideoPorId(idProjeto)); 
+                
             } else if (projeto.tipo === "wiki") {
                 card.className = 'sala-card wiki-card';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>Professor(a): ${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold; color: var(--cor-principal);">📖 VER WIKI</p>`;
                 
+                const idProjeto = projeto.idUnico;
+                card.addEventListener('click', () => abrirModalWikiPorId(idProjeto)); 
+                
             } else if (projeto.tipo === "guia-principal") {
-                card.className = 'sala-card video-card guia-btn'; // Adiciona classe guia-btn para distinguir
+                card.className = 'sala-card video-card guia-btn';
                 card.innerHTML = `<h3>${projeto.nome}</h3><p>${projeto.professor}</p><p style="margin-top: 5px; font-weight: bold;">➡️ CLIQUE PARA ABRIR O GUIA</p>`;
                 
-                // O Listener do guia principal DEVE permanecer aqui, pois ele muda a estrutura.
                 card.addEventListener('click', () => abrirSubGuia(secao));
             }
             
-            // REMOVIDO: Adiciona o componente de avaliação
-            /* if (projeto.tipo !== "guia-principal") {
-                const avaliacaoDiv = renderizarAvaliacao(projeto.idUnico); 
-                card.appendChild(avaliacaoDiv);
-            } */
-
             cardsContainer.appendChild(card);
         });
     });
 }
-
-// REMOVIDO: Função renderizarAvaliacao()
-// REMOVIDO: Função salvarAvaliacao()
 
 // Função para o filtro em tempo real (mantida)
 function adicionarFiltro() {
@@ -343,44 +344,17 @@ function fecharModalVideo() {
     const modal = document.getElementById('modal');
     const videoContainer = document.getElementById('video-embed-container');
     videoContainer.innerHTML = ''; 
-    modal.style.display = 'none';
+    modal.style.display = 'none'; 
 }
-
-// REMOVIDO: Função fecharModalWiki() não é mais necessária já que o modal não existe.
 
 
 // --- 3. Inicialização e Eventos de Fechamento ---
-
-// Função que aplica a Delegação de Eventos (Ouvinte único para os cards)
-function delegarEventosDeClique() {
-    const container = document.getElementById('container-salas');
-    
-    // ANEXA APENAS UM LISTENER AO CONTÊINER PRINCIPAL
-    container.addEventListener('click', (event) => {
-        const card = event.target.closest('.sala-card');
-        
-        // Ignora cliques que não são em um cartão ou se for o botão do Guia Principal
-        if (!card || card.classList.contains('guia-btn')) return;
-
-        const idProjeto = card.getAttribute('data-id-projeto');
-        const tipoAcao = card.getAttribute('data-tipo');
-
-        if (tipoAcao === 'video') {
-            abrirModalVideoPorId(idProjeto);
-        } else if (tipoAcao === 'wiki') {
-            // Chama a função que agora REDIRECIONA
-            abrirModalWikiPorId(idProjeto);
-        }
-    });
-}
-
 
 document.addEventListener('DOMContentLoaded', () => {
     // Garante que a renderização só ocorra na página inicial
     if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
         gerarListaDeSalas(estruturaEventos); 
         adicionarFiltro(); 
-        delegarEventosDeClique(); 
     }
     
     // Configuração dos eventos de fechamento (apenas para o modal de vídeo)
